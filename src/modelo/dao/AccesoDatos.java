@@ -12,8 +12,6 @@ import java.util.HashMap;
 public class AccesoDatos {
 	
 	private Connection connect = null;
-	private Statement statement = null;
-	private ResultSet resultSet = null;
 	
 	public Connection crearConexion(String dominio, String bd, String usr, String clave) {
 		try {
@@ -22,9 +20,9 @@ public class AccesoDatos {
 			connect = DriverManager
 			          .getConnection(url, usr, clave);
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();;
+			e.printStackTrace();
 		} catch (SQLException e) {
-			e.printStackTrace();;
+			e.printStackTrace();
 		}
 		return connect;
 	}
@@ -38,9 +36,14 @@ public class AccesoDatos {
 			Statement stm = connection.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			ResultSetMetaData metaData = rs.getMetaData();
-			while (rs.next()) {
-				System.out.println(rs.getString(1));
+			while(rs.next()) {
+				HashMap<String, Object> filas = new HashMap<String, Object>();
+					for(int i = 1; i <= metaData.getColumnCount(); i++) {
+						filas.put(metaData.getColumnName(i), rs.getObject(i));
+					}
+					resultados.add(filas);
 			}
+			System.out.println(resultados);
 			return resultados;
 		} catch (SQLException e) {
 			e.printStackTrace();

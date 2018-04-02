@@ -11,5 +11,4 @@ public class Main {
 		AccesoDatos mySQL = new AccesoDatos();
 		ArrayList<HashMap<String, Object>> consulta = mySQL.getAllRecords("localhost", "empresa", "root", "", "empleados");
 	}
-
 }
