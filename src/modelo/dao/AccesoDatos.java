@@ -8,12 +8,48 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class AccesoDatos {
 	
-	private Connection connect = null;
+	public void menu() {
+		String tecleado = "XYZ";
+		while(tecleado.compareToIgnoreCase("q") != 0) {
+			System.out.println("\t\t MENU PRINCIPAL");
+			System.out.println("\t\t 1.Opcion 1");
+			System.out.println("\t\t 2.Opcion 2");
+			System.out.println("\t\t 3.Opcion 3");
+			System.out.println("\t\t 4.Opcion 4");
+			System.out.println("\t\t 5.Opcion 5");
+			System.out.println("\t\t q,Q SALIR");
+			Scanner teclado = new Scanner(System.in);
+			tecleado = teclado.nextLine();
+			validacionNumero(tecleado);
+		}
+		System.out.println("Hasta la proxima");
+	}
+	
+	public void validacionNumero(String tecleado) {
+		switch(tecleado) {
+		case "1":
+			System.out.println("Usted ha tecleado .." + tecleado);
+			break;
+		case "2":
+			System.out.println("Usted ha tecleado .." + tecleado);
+			break;
+		case "3":
+			System.out.println("Usted ha tecleado .." + tecleado);
+			break;
+		case "4":
+			System.out.println("Usted ha tecleado .." + tecleado);
+			break;
+		default:
+			System.out.println("El codigo "+ tecleado + " no es válido.");
+		}
+	}
 	
 	public Connection crearConexionMySQL(String dominio, String bd, String usr, String clave) {
+		Connection connect = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			String url = "jdbc:mysql://" + dominio + "/"+ bd;
@@ -163,7 +199,7 @@ public class AccesoDatos {
 	}
 	
 	public void updateRecords(String dominio, String bd, String usr, String clave, String sql) {
-		Connection connection = this.crearConexionSQLite(dominio, bd, usr, clave);
+		Connection connection = this.crearConexionMySQL(dominio, bd, usr, clave);
 		Statement stm;
 		try {
 			stm = connection.createStatement();
