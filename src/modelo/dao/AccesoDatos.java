@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 
 public class AccesoDatos {
 	
@@ -208,4 +209,70 @@ public class AccesoDatos {
 			e.printStackTrace();
 		}
 	}
+	
+	public void listadoProvinciasPorCA(HashMap<String, ArrayList<String>> datosListado) {
+		// recorrer hm de entrada creando el de salida
+		Set<String> comunidades = datosListado.keySet();
+		for (String comunidad : comunidades) {
+			ArrayList<String> listaProvincias = datosListado.get(comunidad);
+			int acumuladoCA = 0;
+			System.out.println("CCAA : " + comunidad);
+			for (String provincia : listaProvincias) {
+				acumuladoCA += Integer.parseInt(provincia.split("#")[1]);
+				System.out.println(provincia.split("#")[0] + ", " + provincia.split("#")[1]);
+			}
+			System.out.println("Total padrón CCAA : " + comunidad + " = " + acumuladoCA);
+		}
+	}
+	
+	public ArrayList<HashMap<String, Object>> obtenerCCAA(String dominio, String bd, String usr, String clave) {
+		//Conexión a la base de datos
+		ArrayList<HashMap<String, Object>> resultados = new ArrayList<HashMap<String, Object>>();
+		try {
+			Connection connection = this.crearConexionMySQL(dominio, bd, usr, clave);
+			String sql = "select (select distinct CA where c1.CodCA = p1.CodCA) as Comunidad, provincia,"+
+					"sum(padron) as Habitantes from padron pa inner join provincias p1, comunidadesautonomas c1, municipios m1"+
+					" where pa.CodMunicipio = m1.CodMunicipio and m1.CodProvincia"+ 
+					"= p1.CodProvincia and p1.CodCA = c1.CodCA group by p1.CodProvincia order by c1.CA, p1.Provincia";
+			Statement stm = connection.createStatement();
+			ResultSet rs = stm.executeQuery(sql);
+			rs.last();
+			if(rs.getRow() < 1) {
+				System.out.println("La tabla está vacia");
+				rs.close();
+				stm.close();
+				return null;
+			}
+			rs.beforeFirst();
+			ResultSetMetaData metaData = rs.getMetaData();
+			for(int i = 1; i <= metaData.getColumnCount(); i++) {
+				if(i < metaData.getColumnCount()) {
+					System.out.print(metaData.getColumnName(i) + " || ");
+				} else {
+					System.out.print(metaData.getColumnName(i) + "\n");
+				}
+			}
+			System.out.println();
+			String ccaa = "";
+			int totalCCAA = 0;
+			while(rs.next()) {
+				if(!ccaa.equals(rs.getString(1)) && ccaa.length() > 0) {
+					System.out.println("Total de " + ccaa + " : " + totalCCAA);
+					System.out.println();
+					totalCCAA = 0;
+				}
+				ccaa = rs.getString(1);
+				totalCCAA += rs.getInt(3);
+				for(int i = 1; i <= metaData.getColumnCount(); i++) {
+					System.out.print(rs.getObject(i) + " || ");
+				}
+				System.out.println();
+			}
+			System.out.println("Total de " + ccaa + " : " + totalCCAA);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return resultados;
+	}
+	
 }
