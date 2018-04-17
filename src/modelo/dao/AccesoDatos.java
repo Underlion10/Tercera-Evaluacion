@@ -230,7 +230,7 @@ public class AccesoDatos {
 		ArrayList<HashMap<String, Object>> resultados = new ArrayList<HashMap<String, Object>>();
 		try {
 			Connection connection = this.crearConexionMySQL(dominio, bd, usr, clave);
-			String sql = "select (select distinct CA where c1.CodCA = p1.CodCA) as Comunidad, provincia,"+
+			String sql = "select CA	, provincia,"+
 					"sum(padron) as Habitantes from padron pa inner join provincias p1, comunidadesautonomas c1, municipios m1"+
 					" where pa.CodMunicipio = m1.CodMunicipio and m1.CodProvincia"+ 
 					"= p1.CodProvincia and p1.CodCA = c1.CodCA group by p1.CodProvincia order by c1.CA, p1.Provincia";
@@ -254,11 +254,13 @@ public class AccesoDatos {
 			}
 			System.out.println();
 			String ccaa = "";
+			int totalSpain = 0;
 			int totalCCAA = 0;
 			while(rs.next()) {
 				if(!ccaa.equals(rs.getString(1)) && ccaa.length() > 0) {
 					System.out.println("Total de " + ccaa + " : " + totalCCAA);
 					System.out.println();
+					totalSpain += totalCCAA;
 					totalCCAA = 0;
 				}
 				ccaa = rs.getString(1);
@@ -269,6 +271,8 @@ public class AccesoDatos {
 				System.out.println();
 			}
 			System.out.println("Total de " + ccaa + " : " + totalCCAA);
+			System.out.println();
+			System.out.println("Total de España :" + totalSpain);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
