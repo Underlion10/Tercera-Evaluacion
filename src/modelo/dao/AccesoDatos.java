@@ -225,9 +225,7 @@ public class AccesoDatos {
 		}
 	}
 	
-	public ArrayList<HashMap<String, Object>> obtenerCCAA(String dominio, String bd, String usr, String clave) {
-		//Conexión a la base de datos
-		ArrayList<HashMap<String, Object>> resultados = new ArrayList<HashMap<String, Object>>();
+	public void obtenerCCAA(String dominio, String bd, String usr, String clave) {
 		try {
 			Connection connection = this.crearConexionMySQL(dominio, bd, usr, clave);
 			String sql = "select CA	, provincia,"+
@@ -241,7 +239,7 @@ public class AccesoDatos {
 				System.out.println("La tabla está vacia");
 				rs.close();
 				stm.close();
-				return null;
+				return;
 			}
 			rs.beforeFirst();
 			ResultSetMetaData metaData = rs.getMetaData();
@@ -249,34 +247,39 @@ public class AccesoDatos {
 				if(i < metaData.getColumnCount()) {
 					System.out.print(metaData.getColumnName(i) + " || ");
 				} else {
-					System.out.print(metaData.getColumnName(i) + "\n");
+					System.out.print(metaData.getColumnName(i) + "\n\n");
 				}
 			}
-			System.out.println();
 			String ccaa = "";
 			int totalSpain = 0;
 			int totalCCAA = 0;
+			int j=0;
 			while(rs.next()) {
 				if(!ccaa.equals(rs.getString(1)) && ccaa.length() > 0) {
 					System.out.println("Total de " + ccaa + " : " + totalCCAA);
 					System.out.println();
 					totalSpain += totalCCAA;
 					totalCCAA = 0;
+					j = 0;
 				}
 				ccaa = rs.getString(1);
-				totalCCAA += rs.getInt(3);
-				for(int i = 1; i <= metaData.getColumnCount(); i++) {
-					System.out.print(rs.getObject(i) + " || ");
+				if(j == 0) {
+					System.out.println(ccaa);
 				}
-				System.out.println();
+				totalCCAA += rs.getInt(3);
+				for(int i = 2; i <= metaData.getColumnCount(); i++) {
+					if(i < metaData.getColumnCount()) {
+						System.out.print(rs.getObject(i) + " || ");
+					} else {
+						System.out.print(rs.getObject(i) + "\n");
+					}
+				}
+				j++;
 			}
-			System.out.println("Total de " + ccaa + " : " + totalCCAA);
-			System.out.println();
-			System.out.println("Total de España :" + totalSpain);
+			System.out.println("Total de " + ccaa + " : " + totalCCAA + "\n");
+			System.out.println("Total de España : " + totalSpain);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return resultados;
 	}
-	
 }
