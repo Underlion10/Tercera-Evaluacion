@@ -23,6 +23,7 @@ public class AccesoDatos {
 			System.out.println("\t\t 4.Opcion 4");
 			System.out.println("\t\t 5.Opcion 5");
 			System.out.println("\t\t q,Q SALIR");
+			@SuppressWarnings("resource")
 			Scanner teclado = new Scanner(System.in);
 			tecleado = teclado.nextLine();
 			validacionNumero(tecleado);
