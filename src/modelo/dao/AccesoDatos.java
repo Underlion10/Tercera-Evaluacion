@@ -8,10 +8,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
 public class AccesoDatos {
+	
+	public int[][] ejercicio1(int nFilas, int nColumnas, int inferior, int superior){
+		int[][] matriz = new int[nFilas][nColumnas];
+		Random rnd = new Random();
+		for(int i = 0; i < matriz.length; i++) {
+			for(int j = 0; j < matriz[i].length; j++) {
+				matriz[i][j] = rnd.nextInt(superior-inferior) + inferior;
+			}
+		}
+		return matriz;
+	}
 	
 	public void menu() {
 		String tecleado = "XYZ";

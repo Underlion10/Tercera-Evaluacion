@@ -13,6 +13,8 @@ public class Main {
 //		mySQL.updateRecords("localhost", "personas", "root", "", sql);
 //		ArrayList<HashMap<String, Object>> consultaPostgre = mySQL.getAllRecordsPostgreSQL("localhost:5433", "Banco", "postgres", "postgresql", "cajas");
 //		System.out.println("fin");
-		mySQL.obtenerCCAA("localhost", "paro", "root", "");
+		//mySQL.obtenerCCAA("localhost", "paro", "root", "");
+		int[][] matriz = mySQL.ejercicio1(5, 7, 4, 15);
+		System.out.println("fin");
 	}
 }
