@@ -1,6 +1,7 @@
 package main;
 
 import modelo.dao.AccesoDatos;
+import modelo.dao.AccesoDatos2;
 
 public class Main {
 	
@@ -15,6 +16,8 @@ public class Main {
 //		System.out.println("fin");
 		//mySQL.obtenerCCAA("localhost", "paro", "root", "");
 		int[][] matriz = mySQL.ejercicio1(5, 7, 4, 15);
+		AccesoDatos2 ac2 = new AccesoDatos2();
+		ac2.obtainTotal();
 		System.out.println("fin");
 	}
 }
