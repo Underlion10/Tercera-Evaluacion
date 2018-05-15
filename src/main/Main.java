@@ -18,6 +18,5 @@ public class Main {
 		int[][] matriz = mySQL.ejercicio1(5, 7, 4, 15);
 		AccesoDatos2 ac2 = new AccesoDatos2();
 		ac2.obtainTotal();
-		System.out.println("fin");
 	}
 }
