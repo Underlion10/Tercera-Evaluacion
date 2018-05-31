@@ -36,7 +36,7 @@ public class AccesoDatos2 {
 				totalOrders.put(rs.getDouble(1), new ArrayList<Float>());
 			}
 			rs.close();
-			ResultSet rs2 = smt.executeQuery("select * from order_details");
+			ResultSet rs2 = smt.executeQuery("select * from order_details order by price");
 			Set<Double> ids = totalOrders.keySet();
 			while(rs2.next()) {
 				for(Double id: ids) {
@@ -45,6 +45,7 @@ public class AccesoDatos2 {
 					};
 				}
 			}
+			Float totalTabla = 0f;
 			for(Double id: ids) {
 				ArrayList<Float> precios = totalOrders.get(id);
 				System.out.println("Id_Orders: " + id);
@@ -53,11 +54,12 @@ public class AccesoDatos2 {
 					System.out.println(precios.get(i));
 					total += precios.get(i);
 				}
+				totalTabla += total;
 				System.out.println("Total " + id + " : " + total);
 			}
+			System.out.println("Total facturas : " + totalTabla);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-
 }
